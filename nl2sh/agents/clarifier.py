@@ -22,7 +22,7 @@ class Clarifier:
         self.model = model
         self.name = "clarifier"
         self.instance = LLMService(model=model)
-        self.template = clarifier_prompt  # 保存原始模板
+        self.template = clarifier_prompt
 
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
         if "usr_input" not in context:
