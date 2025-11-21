@@ -29,7 +29,7 @@ class Pipeline:
     pass
 
 
-def eval():
+def evaluate():
     pass
 
 
