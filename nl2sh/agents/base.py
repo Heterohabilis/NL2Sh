@@ -32,9 +32,10 @@ class LLM:
 
 
 if __name__ == "__main__":
-    agent = LLM()
+    # ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2:CeF0gA8R
+    agent = LLM(model = "gpt-4o")
     o = agent.chat(messages = [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Write an ls command."},
+    {"role": "system", "content": "You are an expert Linux Bash assistant. Translate the user's natural language request into a valid Bash command. Output only the command code without markdown or explanation."},
+    {"role": "user", "content": "Count all the lines of all files with names ending with 'php' in current directory and subdirectories recursively"},
 ],)
     print(o)

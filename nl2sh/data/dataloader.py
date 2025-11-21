@@ -1,68 +1,108 @@
+import random
+
 import json
+import subprocess
+import shutil
 from datasets import load_dataset
+
+
+if not shutil.which("shellcheck"):
+    raise EnvironmentError(
+        "Error: 'shellcheck' not found. Please install it via 'apt install shellcheck' or 'brew install shellcheck'.")
+
+
+def is_code_safe_by_shellcheck(bash_cmd):
+    full_script = f"#!/bin/bash\n{bash_cmd}"
+
+    try:
+        proc = subprocess.run(
+            ["shellcheck", "-s", "bash", "--format=json", "-"],
+            input=full_script,
+            capture_output=True,
+            text=True
+        )
+    except Exception as e:
+        print(f"Shellcheck execution failed: {e}")
+        return False
+
+    if proc.returncode != 0 and not proc.stdout:
+        return False
+
+    try:
+        issues = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return False
+
+    if not issues:
+        return True
+
+    for issue in issues:
+        level = issue.get('level')  # 'error', 'warning', 'info', 'style'
+        code = issue.get('code')
+
+        if level in ['error', 'warning']:
+            return False
+
+    return True
 
 
 def generate_finetune_data():
     print("Loading dataset...")
-    # Using the specific config "train" as per your snippet
     dataset = load_dataset("westenfelder/NL2SH-ALFA", "train", split="train")
 
-    total_count = len(dataset)
-    print(f"Dataset loaded. Total records: {total_count}")
+    target_count = 750
 
-    # Randomly sample 750 records
-    sample_size = 750
-    print(f"Randomly sampling {sample_size} records with seed 42...")
-    sampled_dataset = dataset.shuffle(seed=42).select(range(sample_size))
+    shuffled_dataset = dataset.shuffle(seed = 114514)
 
     system_prompt = "You are an expert Linux Bash assistant. Translate the user's natural language request into a valid Bash command. Output only the command code without markdown or explanation."
-    output_file = "nl2bash_finetune_750.jsonl"
+    output_file = f"nl2bash_finetune_{target_count}.jsonl"
 
     formatted_data = []
+    stats = {"scanned": 0, "kept": 0, "rejected": 0}
 
-    # Stats counters for diversity check
-    stats = {
-        "pipes (|)": 0,
-        "sudo": 0,
-        "awk/sed": 0,
-        "find": 0,
-        "grep": 0
-    }
+    print(f"Starting ShellCheck scan... Target: {target_count} high-quality records.")
 
-    for row in sampled_dataset:
+    for row in shuffled_dataset:
+        if stats["kept"] >= target_count:
+            break
+
+        stats["scanned"] += 1
         nl_text = row['nl']
         bash_cmd = row['bash']
 
-        if "|" in bash_cmd: stats["pipes (|)"] += 1
-        if "sudo" in bash_cmd: stats["sudo"] += 1
-        if "awk" in bash_cmd or "sed" in bash_cmd: stats["awk/sed"] += 1
-        if "find" in bash_cmd: stats["find"] += 1
-        if "grep" in bash_cmd: stats["grep"] += 1
+        if is_code_safe_by_shellcheck(bash_cmd):
+            entry = {
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": nl_text},
+                    {"role": "assistant", "content": bash_cmd}
+                ]
+            }
+            formatted_data.append(entry)
+            stats["kept"] += 1
+        else:
+            stats["rejected"] += 1
 
-        entry = {
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": nl_text},
-                {"role": "assistant", "content": bash_cmd}
-            ]
-        }
-        formatted_data.append(entry)
+        if stats["scanned"] % 100 == 0:
+            pass_rate = stats["kept"] / stats["scanned"]
+            print(f"\rScanned: {stats['scanned']} | Kept: {stats['kept']} | Pass Rate: {pass_rate:.1%}", end="")
+
+    print(f"\n\nDone!")
+    if stats["kept"] < target_count:
+        print(f"Warning: Only found {stats['kept']} valid records after scanning entire dataset.")
 
     with open(output_file, "w", encoding="utf-8") as f:
         for entry in formatted_data:
             f.write(json.dumps(entry) + "\n")
 
-    print(f"\nSuccessfully generated file: {output_file}")
+    print(f"Successfully generated file: {output_file}")
     print("-" * 30)
-    print("Sampled Data Statistics (Diversity Check):")
-    for key, val in stats.items():
-        print(f"- Contains {key}: {val} records ({val / sample_size:.1%})")
+    print(f"Final Filter Stats:")
+    print(f"- Total Scanned: {stats['scanned']}")
+    print(f"- Kept (Safe):   {stats['kept']}")
+    print(f"- Rejected:      {stats['rejected']}")
+    print(f"- Final Pass Rate: {stats['kept'] / stats['scanned']:.1%}")
     print("-" * 30)
-
-
-import json
-import random
-from datasets import load_dataset
 
 
 def generate_validation_data():
