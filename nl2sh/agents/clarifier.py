@@ -1,5 +1,53 @@
-from nl2sh.agents.base import
+from nl2sh.agents.base import LLMService
+from nl2sh.prompts.clarifier_pmpt import clarifier_prompt
+from typing import List, Dict, Any
+import os
+
+"""
+context = {
+    "usr_input": "xxx", 
+    "clarifier": "yyy",
+    "composer_history": [
+        'h1', 'h2', 'h3'
+    ],
+    "inspector_history": [
+        'h1', 'h2', 'h3'
+    ],
+    "state": "sss"
+}
+"""
 
 
 class Clarifier:
-    pass
+    def __init__(self, model: str = "gpt-4o-mini") -> None:
+        self.model = model
+        self.name = "clarifier"
+        self.instance = LLMService(model = model)
+        self.prompt = clarifier_prompt
+
+    def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        if "usr_input" not in context:
+            raise KeyError("Missing usr_input in context")
+        usr_input = context["usr_input"]
+        self.prompt = (
+            self.prompt.replace('{{USER_NATURAL_LANGUAGE_REQUEST}}', usr_input))
+        try:
+            res = self.instance.chat(
+                [{"role": "user", "content": self.prompt},]
+            )
+        except Exception as e:
+            raise e
+        if not res:
+            raise ValueError("The LLM said nothing")
+        context['clarifier'] = res
+        return context
+
+
+if __name__ == "__main__":
+    # test with python -m nl2sh.agents.clarifier
+    c = Clarifier(model = "gpt-4o-mini")
+    context = {
+        'usr_input': "Count all the lines of all files with names ending with 'java' in current directory and subdirectories recursively"
+    }
+    context = c.execute(context)
+    print(context)
