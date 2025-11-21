@@ -66,9 +66,10 @@ class Composer:
 
 
 if __name__ == "__main__":
-    model = "ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-750-filtered:CeGCZAoF"
+    model = "gpt-4o-mini"
+    #"ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-750-filtered:CeGCZAoF"
     context = {
-        "usr_input": "Count all the lines of all files with names ending with 'php' in current directory and subdirectories recursively",
+        "usr_input": "Concisely introduce M4 Sherman, and output the result to tank.txt file of the current dir.",
         "composer_history": ['nooo, i do not like pizza'],
         "inspector_history": ['You stupid! follow the task guide!'],
     }
