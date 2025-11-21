@@ -1,7 +1,6 @@
 from nl2sh.agents.base import LLMService
 from nl2sh.prompts.clarifier_pmpt import clarifier_prompt
-from typing import List, Dict, Any
-import os
+from typing import Dict, Any
 
 """
 context = {
