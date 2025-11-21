@@ -1,4 +1,4 @@
-from nl2sh.agents.base import LLMService
+from nl2sh.agents.llm_service import LLMService
 from nl2sh.prompts.clarifier_pmpt import clarifier_prompt
 from typing import Dict, Any
 
@@ -40,7 +40,6 @@ class Clarifier:
         context["clarifier"] = res.strip()
         context["state"] = "clarified"
         return context
-
 
 
 if __name__ == "__main__":
