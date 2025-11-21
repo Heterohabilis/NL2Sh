@@ -1,0 +1,2 @@
+class Clarifier:
+    pass
