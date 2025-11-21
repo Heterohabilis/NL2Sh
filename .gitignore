@@ -1,2 +1,8 @@
 .venv/*
 .env
+__pycache__/
+*.py[cod]
+*$py.class
+nl2sh/agents/__pycache__/*
+nl2sh/data/__pycache__/*
+nl2sh/prompts/__pycache__/*
