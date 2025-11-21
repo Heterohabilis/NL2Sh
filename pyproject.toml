@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "NL2Sh"
+version = "0.1.0"
+description = "A multi-agent NL-to-shell smart Unix/Linux terminal (scheduler, composer, inspector, evaluator)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+authors = [
+  { name = "Terry Mu", email = "xm2204@nyu.edu" }
+]
+
+dependencies = [
+  "openai>=1.40.0",
+  "python-dotenv>=1.0.0",
+  "rich>=13.7.0",
+  "tqdm>=4.66.0",
+  "pandas>=2.2.0",
+  "matplotlib>=3.8.0",
+  "typer[all]>=0.12.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "nose2>=0.14.0",
+  "black>=24.3.0",
+  "ruff>=0.4.0",
+  "mypy>=1.10.0",
+]
+
+[project.scripts]
+smart-terminal = "smart_unix_terminal.main:cli"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+
+[tool.nose2]
+plugins = ["nose2.plugins.junitxml", "nose2.plugins.mp"]
