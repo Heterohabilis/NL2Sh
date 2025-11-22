@@ -11,3 +11,4 @@ gened_files/*
 eval_results/*
 !eval_results/.gitkeep
 data/*.jsonl
+.idea/*
