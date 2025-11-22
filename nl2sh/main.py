@@ -33,9 +33,9 @@ class Inference:
             COMPOSED: self.inspector,
             NOT_PASS: self.composer,
         }
-        print(f"Current model settings:"
-              f"Composer = {self.composer.model}"
-              f"Clarifier = {self.clarifier.model}"
+        print(f"Current model settings: \n {'='*64} \n"
+              f"Composer = {self.composer.model} \n"
+              f"Clarifier = {self.clarifier.model} \n"
               f"Inspector = {self.inspector.model}")
 
     def run_single(self, task: str, max_recompose: int | None = None) -> str:
@@ -160,4 +160,4 @@ class TryMe:
 if __name__ == "__main__":
     e = Inference(inspect_abltn=True)
     test_set = e.load_validation_nl()
-    # e.gen_eval_commands(test_set, max_recompose=2, ofile = './gened_files/base_o.txt')
+    e.gen_eval_commands(test_set, max_recompose=2, ofile = './gened_files/base_o.txt')
