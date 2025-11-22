@@ -1,9 +1,7 @@
 import json
-import os
 from pathlib import Path
 from typing import List
 
-from openai.resources import FineTuning
 from tqdm import tqdm
 
 from nl2sh.agents.clarifier import Clarifier
@@ -156,6 +154,7 @@ class Inference:
 
 class TryMe:
     pass
+
 
 if __name__ == "__main__":
     e = Inference(inspect_abltn=True)
