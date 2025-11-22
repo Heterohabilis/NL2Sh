@@ -46,7 +46,7 @@ def is_code_safe_by_shellcheck(bash_cmd):
     return True
 
 
-def generate_finetune_data():
+def generate_finetune_data(ofile = None):
     print("Loading dataset...")
     dataset = load_dataset("westenfelder/NL2SH-ALFA", "train", split="train")
 
@@ -55,7 +55,7 @@ def generate_finetune_data():
     shuffled_dataset = dataset.shuffle(seed = 114514)
 
     system_prompt = "You are an expert Linux Bash assistant. Translate the user's natural language request into a valid Bash command. Output only the command code without markdown or explanation."
-    output_file = f"nl2bash_finetune_{target_count}.jsonl"
+    output_file = f"nl2bash_finetune_{target_count}.jsonl" if not ofile else ofile
 
     formatted_data = []
     stats = {"scanned": 0, "kept": 0, "rejected": 0}
@@ -105,7 +105,7 @@ def generate_finetune_data():
     print("-" * 30)
 
 
-def generate_validation_data():
+def generate_validation_data(ofile = None):
     print("Loading Test dataset...")
     dataset = load_dataset("westenfelder/NL2SH-ALFA", "test", split="train")
 
@@ -134,7 +134,7 @@ def generate_validation_data():
 
     # Must use the EXACT same system prompt as the training set
     system_prompt = "You are an expert Linux Bash assistant. Translate the user's natural language request into a valid Bash command. Output only the command code without markdown or explanation."
-    output_file = "nl2bash_validation_50.jsonl"
+    output_file = "nl2bash_validation_50.jsonl" if not ofile else ofile
 
     formatted_lines = []
 
@@ -165,7 +165,7 @@ def generate_validation_data():
     print("-" * 30)
 
 
-def generate_eval_data():
+def generate_eval_data(ofile = None):
     print("Loading Test dataset...")
     dataset = load_dataset("westenfelder/NL2SH-ALFA", "test", split="train")
 
@@ -192,7 +192,7 @@ def generate_eval_data():
     # Shuffle the final mix so they aren't ordered by difficulty
     random.shuffle(selected_data)
 
-    output_file = "nl2bash_eval_50.jsonl"
+    output_file = "nl2bash_eval_50.jsonl" if not ofile else ofile
 
     formatted_lines = []
 
