@@ -50,7 +50,7 @@ def generate_finetune_data():
     print("Loading dataset...")
     dataset = load_dataset("westenfelder/NL2SH-ALFA", "train", split="train")
 
-    target_count = 750
+    target_count = 1000
 
     shuffled_dataset = dataset.shuffle(seed = 114514)
 
@@ -165,7 +165,62 @@ def generate_validation_data():
     print("-" * 30)
 
 
+def generate_eval_data():
+    print("Loading Test dataset...")
+    dataset = load_dataset("westenfelder/NL2SH-ALFA", "test", split="train")
+
+    print(f"Test dataset loaded. Total records: {len(dataset)}")
+
+    # Group by difficulty
+    diff_0 = [row for row in dataset if row['difficulty'] == 0]
+    diff_1 = [row for row in dataset if row['difficulty'] == 1]
+    diff_2 = [row for row in dataset if row['difficulty'] == 2]
+
+    print(f"Pool Stats: Diff_0: {len(diff_0)}, Diff_1: {len(diff_1)}, Diff_2: {len(diff_2)}")
+
+    # Stratified sampling target: 17 + 17 + 16 = 50
+    sample_counts = {0: 16, 1: 17, 2: 17}
+
+    # Use fixed seed for reproducibility
+    random.seed(114514)
+
+    selected_data = []
+    selected_data.extend(random.sample(diff_0, sample_counts[0]))
+    selected_data.extend(random.sample(diff_1, sample_counts[1]))
+    selected_data.extend(random.sample(diff_2, sample_counts[2]))
+
+    # Shuffle the final mix so they aren't ordered by difficulty
+    random.shuffle(selected_data)
+
+    output_file = "nl2bash_eval_50.jsonl"
+
+    formatted_lines = []
+
+    for row in selected_data:
+        nl_text = row['nl']
+
+        entry = {
+            "messages": [
+                {"role": "user", "content": nl_text},
+            ]
+        }
+        formatted_lines.append(json.dumps(entry))
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        for line in formatted_lines:
+            f.write(line + "\n")
+
+    print(f"\nSuccessfully generated file: {output_file}")
+    print("-" * 30)
+    print("Eval Set Composition:")
+    final_diffs = [row['difficulty'] for row in selected_data]
+    print(f"- Difficulty 0: {final_diffs.count(0)} records")
+    print(f"- Difficulty 1: {final_diffs.count(1)} records")
+    print(f"- Difficulty 2: {final_diffs.count(2)} records")
+    print("-" * 30)
+
 
 if __name__ == "__main__":
     generate_finetune_data()
     generate_validation_data()
+    generate_eval_data()

@@ -118,7 +118,7 @@ class Inference:
         return results
 
     def load_validation_nl(self,
-            path: str | Path = "nl2sh/data/nl2bash_validation_50.jsonl",
+            path: str | Path = "nl2sh/data/nl2bash_eval_50.jsonl",
     ) -> List[str]:
 
         path = Path(path)

@@ -1,0 +1,50 @@
+{"messages": [{"role": "user", "content": "display the first 5 lines of the setup_nl2b_fs_1.sh file"}]}
+{"messages": [{"role": "user", "content": "Count the number of regular files in directory tree ${DIRECTORY} that contain a vowel in their names"}]}
+{"messages": [{"role": "user", "content": "Dump \"/system/text1.txt\" as ASCII characters"}]}
+{"messages": [{"role": "user", "content": "Print the last 10 lines of the file /testbed/dir3/subdir1/subsubdir1/textfile3.txt"}]}
+{"messages": [{"role": "user", "content": "Get the total size of all files in testbed/ and save it to total_size.txt"}]}
+{"messages": [{"role": "user", "content": "Find files in the /workspace directory and sub-directories, that changed over an hour ago."}]}
+{"messages": [{"role": "user", "content": "display the routing table"}]}
+{"messages": [{"role": "user", "content": "Create an empty file \"abc.txt\" in each directory named \"dir1\" under testbed directory."}]}
+{"messages": [{"role": "user", "content": "Create a symbolc link in the /workspace/dir1 to root folder"}]}
+{"messages": [{"role": "user", "content": "print running processes in a tree format"}]}
+{"messages": [{"role": "user", "content": "print every other line of setup_nl2b_fs_1.sh"}]}
+{"messages": [{"role": "user", "content": "Calculate the md5 sum of all files in directory tree \"/workspace\""}]}
+{"messages": [{"role": "user", "content": "Calculate the md5 sum of all files in the /workspace directory with the filename printed first"}]}
+{"messages": [{"role": "user", "content": "search for the word \"hello\" in all the regular/normal files in the  /workspace folder and display the matched file name"}]}
+{"messages": [{"role": "user", "content": "Print numbers 1 through 10 separated by \":\""}]}
+{"messages": [{"role": "user", "content": "Display the 5 smallest files in the /testbed directory and its sub-directories."}]}
+{"messages": [{"role": "user", "content": "Display differences between list of files in /workspace/dir1 and /workspace/dir2."}]}
+{"messages": [{"role": "user", "content": "Create a copy of the /workspace directory structure in the /usr directory,"}]}
+{"messages": [{"role": "user", "content": "Remove all *.sql files in the '/system/folder3/backup_dbg' directory that were last modified more than 25 days ago"}]}
+{"messages": [{"role": "user", "content": "Search for the file old2.txt in the /workspace folder and list its permissions and creation time."}]}
+{"messages": [{"role": "user", "content": "print current swap usage"}]}
+{"messages": [{"role": "user", "content": "Recursively finds all files with whole word \"foo\" in the '/system', and precedes found string with its number in file."}]}
+{"messages": [{"role": "user", "content": "list all files in the current directory including hidden files"}]}
+{"messages": [{"role": "user", "content": "Remove all *.txt files, except \"keep.txt\", under /system/folder1 directory modified more than 5 minutes ago. Do not include subdirectories."}]}
+{"messages": [{"role": "user", "content": "Calculate the md5 sum of the contents of the sorted list of files \"$FILES\""}]}
+{"messages": [{"role": "user", "content": "Remove all files and directories under '/system/folder3/temp' directory tree that match with one of the name patterns '.DS_Store', '._.DS_Store' , '._*', '.TemporaryItems' or '.apdisk'"}]}
+{"messages": [{"role": "user", "content": "count the lines, words, and characters in setup_nl2b_fs_1.sh"}]}
+{"messages": [{"role": "user", "content": "Remove all *.log files from the /system/folder1 tree"}]}
+{"messages": [{"role": "user", "content": "print the max number of user processes"}]}
+{"messages": [{"role": "user", "content": "print the lines in setup_nl2b_fs_1.sh sorted alphabetically"}]}
+{"messages": [{"role": "user", "content": "print the max cpu time"}]}
+{"messages": [{"role": "user", "content": "print environment variables"}]}
+{"messages": [{"role": "user", "content": "prints first line of \"/workspace/dir1/long.txt\""}]}
+{"messages": [{"role": "user", "content": "print the last logged in users and show the full user and domain names"}]}
+{"messages": [{"role": "user", "content": "print the kernel version"}]}
+{"messages": [{"role": "user", "content": "Recursively search for all regular files below directory \"/system/folder3/\", and output the name of each, without any containing directories."}]}
+{"messages": [{"role": "user", "content": "list all zero-length files under the /workspace directory"}]}
+{"messages": [{"role": "user", "content": "Print amount of space available on the file system containing path to the /system directory in megabytes."}]}
+{"messages": [{"role": "user", "content": "print the bash profile in the home directory"}]}
+{"messages": [{"role": "user", "content": "Find all files in the directory /testbed that have been modified in the last 24 hours and print their path"}]}
+{"messages": [{"role": "user", "content": "Unhide all hidden files in the /workspace directory. Do not include subdirectories."}]}
+{"messages": [{"role": "user", "content": "print the path of the bash executable"}]}
+{"messages": [{"role": "user", "content": "Compute the mean average of the word count of *.txt files smaller than 6 words in the /testbed directory"}]}
+{"messages": [{"role": "user", "content": "Concatenate all .txt files residing in the /system tree into a single file \"/system/folder3/temp/concat.txt\""}]}
+{"messages": [{"role": "user", "content": "Calculate the md5 sum of the sorted list of md5 sums of all \".py\" files under /testbed/dir1/subdir1"}]}
+{"messages": [{"role": "user", "content": "print the tenth line of the setup_nl2b_fs_1.sh"}]}
+{"messages": [{"role": "user", "content": "search for all the files in the folder /testbed/dir1 which have sticky bit set and have the permissions 553"}]}
+{"messages": [{"role": "user", "content": "Create a symbolic link in directory \"~/newlinks\" for each file listed in \"/workspace/results.txt\""}]}
+{"messages": [{"role": "user", "content": "Counts all files in the /testbed folder and subfolders."}]}
+{"messages": [{"role": "user", "content": "Recursively removes all files in the /system/folder1 folder but '*txt' files."}]}
