@@ -15,14 +15,15 @@ authors = [
 ]
 
 dependencies = [
-  "openai>=1.40.0",
-  "python-dotenv>=1.0.0",
-  "rich>=13.7.0",
-  "tqdm>=4.66.0",
-  "pandas>=2.2.0",
-  "matplotlib>=3.8.0",
-  "typer[all]>=0.12.0",
-  "datasets"
+    "openai>=1.40.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.7.0",
+    "tqdm>=4.66.0",
+    "pandas>=2.2.0",
+    "matplotlib>=3.8.0",
+    "typer[all]>=0.12.0",
+    "datasets",
+    "ipywidgets",
 ]
 
 [project.optional-dependencies]

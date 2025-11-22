@@ -10,3 +10,4 @@ gened_files/*
 !gened_files/.gitkeep
 eval_results/*
 !eval_results/.gitkeep
+data/*.jsonl
