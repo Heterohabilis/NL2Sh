@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import List
+from typing import List, Any
 
 from tqdm import tqdm
 
@@ -20,6 +20,40 @@ FT_MD = 'ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-1k-filtered:CeTXCBeh'
 MD = 'gpt-4o-mini'
 
 
+def load_evaluation_nl(path: str | Path = "nl2sh/data/nl2bash_eval_50.jsonl",
+                       ) -> List[str]:
+
+    path = Path(path)
+    nl_list: List[str] = []
+
+    with path.open("r", encoding="utf-8") as f:
+        for line_no, line in enumerate(f, start=1):
+            line = line.strip()
+            if not line:
+                continue
+
+            try:
+                obj = json.loads(line)
+            except json.JSONDecodeError as e:
+                print(f"[WARN] line {line_no}: JSON decode error: {e}")
+                continue
+
+            messages = obj.get("messages", [])
+            user_msgs = [
+                m.get("content", "")
+                for m in messages
+                if m.get("role") == "user"
+            ]
+
+            if not user_msgs:
+                print(f"[WARN] line {line_no}: no user message found")
+                continue
+
+            nl_list.append(user_msgs[0])
+
+    return nl_list
+
+
 class Inference:
     def __init__(self, use_finetune: bool=False, inspect_abltn: bool=False):
         self.composer = Composer(model = FT_MD) if use_finetune else Composer()
@@ -36,7 +70,7 @@ class Inference:
               f"Clarifier = {self.clarifier.model} \n"
               f"Inspector = {self.inspector.model}")
 
-    def run_single(self, task: str, max_recompose: int | None = None) -> str:
+    def run_single(self, task: str, max_recompose: int | None = None) -> tuple[str | Any, int] | str:
         print(f"Current Task: {task} \n {'='*64}")
         context = {
             "usr_input": task,
@@ -95,61 +129,27 @@ class Inference:
         )
 
         if context["composer_history"]:
-            return final_cmd
+            return final_cmd, recompose_cnt
         else:
             return ""
 
 
     def gen_eval_commands(self, tasks: List[str],
                           max_recompose: int | None = None,
-                          ofile: str|None = None) -> List[tuple[str, str]]:
-        results: List[tuple[str, str]] = []
+                          ofile: str|None = None) -> List[tuple[str, str, int]]:
+        results: List[tuple[str, str, int]] = []
         for task in tqdm(tasks, desc="Evaluating tasks", unit="task"):
-            cmd = self.run_single(task, max_recompose)
-            results.append((task, cmd))
+            cmd, retry_times = self.run_single(task, max_recompose)
+            results.append((task, cmd, retry_times))
         if not ofile:
             print(results)
         else:
             with open(ofile, "w", encoding="utf-8") as f:
-                for task, cmd in results:
-                    record = {"task": task, "command": cmd}
+                for task, cmd, retry_times in results:
+                    record = {"task": task, "command": cmd, "retry_times": retry_times}
                     f.write(json.dumps(record, ensure_ascii=False) + "\n")
             print(f"Saved {len(results)} records to {ofile}")
         return results
-
-    def load_validation_nl(self,
-            path: str | Path = "nl2sh/data/nl2bash_eval_50.jsonl",
-    ) -> List[str]:
-
-        path = Path(path)
-        nl_list: List[str] = []
-
-        with path.open("r", encoding="utf-8") as f:
-            for line_no, line in enumerate(f, start=1):
-                line = line.strip()
-                if not line:
-                    continue
-
-                try:
-                    obj = json.loads(line)
-                except json.JSONDecodeError as e:
-                    print(f"[WARN] line {line_no}: JSON decode error: {e}")
-                    continue
-
-                messages = obj.get("messages", [])
-                user_msgs = [
-                    m.get("content", "")
-                    for m in messages
-                    if m.get("role") == "user"
-                ]
-
-                if not user_msgs:
-                    print(f"[WARN] line {line_no}: no user message found")
-                    continue
-
-                nl_list.append(user_msgs[0])
-
-        return nl_list
 
 
 class TryMe:
@@ -158,5 +158,5 @@ class TryMe:
 
 if __name__ == "__main__":
     e = Inference(inspect_abltn=True)
-    test_set = e.load_validation_nl()
+    test_set = load_evaluation_nl()
     e.gen_eval_commands(test_set, max_recompose=2, ofile = './gened_files/base_o.txt')

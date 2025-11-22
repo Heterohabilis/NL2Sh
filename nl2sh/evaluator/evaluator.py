@@ -30,10 +30,10 @@ class Evaluator:
 
     def eval_batch(
             self,
-            pairs: List[Tuple[str, str]],
+            pairs: List[Tuple[str, str, int]],
             num_workers: int = 5,
             ofile: str | Path | None = None,
-    ) -> List[Tuple[str, str, int]]:
+    ) -> list[tuple[str, str, int]] | tuple[list[tuple[str, str, int]], float]:
         results: List[Tuple[str, str, int]] = []
         total_score = 0
         if not pairs:
@@ -42,7 +42,7 @@ class Evaluator:
         with ThreadPoolExecutor(max_workers=num_workers) as ex:
             future_to_pair = {
                 ex.submit(self._eval_one, task, cmd): (task, cmd)
-                for (task, cmd) in pairs
+                for (task, cmd, _) in pairs
             }
 
             for fut in tqdm(
@@ -74,16 +74,16 @@ class Evaluator:
             print(f"total score: {total_score}, avg_score = {total_score / len(results)}")
             print(f"Saved {len(results)} judged records to {ofile}")
 
-        return results
+        return results, total_score/len(results)
 
     def eval_from_file(
             self,
             infile: str | Path,
             outfile: str | Path,
             num_workers: int = 5,
-    ) -> List[Tuple[str, str, int]]:
+    ) -> list[tuple[str, str, int]] | tuple[list[tuple[str, str, int]], float]:
         infile = Path(infile)
-        pairs: List[Tuple[str, str]] = []
+        pairs: List[Tuple[str, str, int]] = []
 
         with infile.open("r", encoding="utf-8") as f:
             for line in f:
@@ -94,7 +94,7 @@ class Evaluator:
                 task = obj.get("task", "")
                 cmd = obj.get("command", "")
                 if task and cmd:
-                    pairs.append((task, cmd))
+                    pairs.append((task, cmd, 0))
 
         return self.eval_batch(pairs, num_workers=num_workers, ofile=outfile)
 

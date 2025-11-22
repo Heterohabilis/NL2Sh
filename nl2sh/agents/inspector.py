@@ -18,7 +18,7 @@ context = {
 
 
 class Inspector:
-    def __init__(self, model: str = 'gpt-4o'):
+    def __init__(self, model: str = 'gpt-5.1'):
         self.model = model
         self.name = "inspector"
         self.instance = LLMService(model=model)
