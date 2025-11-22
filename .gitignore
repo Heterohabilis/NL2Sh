@@ -6,3 +6,5 @@ __pycache__/
 nl2sh/agents/__pycache__/*
 nl2sh/data/__pycache__/*
 nl2sh/prompts/__pycache__/*
+gened_files/*
+!gened_files/.gitkeep

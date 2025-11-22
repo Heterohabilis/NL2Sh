@@ -67,7 +67,7 @@ class Composer:
 
 if __name__ == "__main__":
     model = "gpt-4o-mini"
-    #"ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-750-filtered:CeGCZAoF"
+    #model = "ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-1k-filtered:CeTXCBeh"
     context = {
         "usr_input": "Concisely introduce M4 Sherman, and output the result to tank.txt file of the current dir.",
         "composer_history": ['nooo, i do not like pizza'],
