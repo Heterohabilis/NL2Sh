@@ -1,13 +1,33 @@
+"""
+    LLM service wrapper for OpenAI API
+"""
+
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import List, Dict, Any
 import json
 
+"""
+As a convention, we save the key in the .env file as OPENAI_KEY in the project root directory.
+We load it here and save as a global constant KEY.
+"""
 load_dotenv()
 KEY = os.getenv("OPENAI_KEY")
 
+
 class LLMService:
+    """  
+    LLM service wrapper for OpenAI API
+    Uses the OpenAI Python SDK to interact with the API.
+    Attributes:
+        model (str): The model to use for the LLM service.
+        client (OpenAI): The OpenAI client instance.
+    Methods:
+        chat(messages: List[Dict[str, Any]]) -> str: Sends a chat request to the LLM service and returns the response as a string.
+        chat_json(messages: List[Dict[str, Any]]) -> Any: Sends a chat request to the LLM service and returns the response parsed as JSON.
+    """
+
     def __init__(self, model = "gpt-4-mini") -> None:
         self.client = OpenAI(api_key=KEY)
         self.model = model
