@@ -66,6 +66,13 @@ where:
 - `inspector_history` is a list of the suggestions given by the inspector to previous incorrect commands;
 - `state` is the current state of the system.
 
+### Evaluation
+
+- Evaluator is not a part of the pipeline above.
+- The evaluator will read the result pairs of inference in a format of `(task, command)` and provide a score in [0, 10] for each pair. 
+- Like the inspector, the evaluator also needs a model with strong code understanding ability, so we also choose to use GPT-5.1.
+- To further increase the efficiency, and considering this task is API-IO-bound, we let evaluation run in parallel with 5 worker threads.
+
 ## Usage
 
 - Create a virtual environment:
