@@ -18,6 +18,19 @@ context = {
 
 
 class Inspector:
+    """
+    The Inspector agent is responsible for evaluating the correctness of the commands during generation.
+    Attributes:
+        model (str): The language model to be used for inspection.
+        name (str): The name of the agent.
+        instance (LLMService): An instance of the LLMService for interacting with the language model.
+        template (str): The prompt template used for inspection.
+    Methods:
+        _parse_output(o: str) -> Tuple[Optional[bool], Optional[str]]:
+            Parses the output from the language model to determine if the command is correct.
+        execute(context: Dict[str, Any]) -> Dict[str, Any]:
+            Executes the inspection process on the provided context and updates it accordingly. 
+    """
     def __init__(self, model: str = 'gpt-5.1'):
         self.model = model
         self.name = "inspector"
@@ -25,13 +38,26 @@ class Inspector:
         self.template = inspector_pmt
 
     def _parse_output(self, o: str):
-
+        """
+        In the prompt, we require the LLM to output either:
+        "CORRECT"
+        or
+        "INCORRECT: <guide>"
+        This function parses that output.
+        Args:
+            o (str): The output string from the language model.
+        Returns:
+            Tuple[Optional[bool], Optional[str]]: A tuple where the first element is True if the command is correct,
+            False if incorrect, and None if undetermined. The second element is the guide for correction if applicable.
+        """
         text = o.strip()
 
         if text == "CORRECT":
+            # The command is correct
             return True, None
 
         if "INCORRECT:" in text:
+            # The command is incorrect, extract the guide
             parts = text.split("INCORRECT:", 1)
 
             if len(parts) > 1:
@@ -42,37 +68,47 @@ class Inspector:
         return None, None
 
     def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        task = ''
+        task = ''   # init task buffer.
+
         if 'clarifier' in context:
+            # similar to composer, if clarifier exists, use it as task description.
             task = context['clarifier']
         elif 'usr_input' in context:
+            # otherwise, use usr_input as task description.
             task = context['usr_input']
         else:
             raise KeyError("No valid input!")
 
+        # make sure we have at least one composer record.
         if 'composer_history' not in context:
             raise KeyError("No valid command!")
 
         if len(context["composer_history"]) == 0:
             raise ValueError("No valid command!")
 
+        # get the latest command to judge.
         to_judge = context['composer_history'][-1]
 
+        # format the prompt.
         prompt = (self.template
                   .replace('{{TASK_DESCRIPTION}}', task)
                   .replace('{{USER_COMMAND}}', to_judge))
 
+        # call the LLM service.
         res = self.instance.chat(
             [{"role": "system", "content": prompt}]
         )
         if not res:
             raise ValueError("The LLM said nothing")
 
+        # parse the output.
         is_correct, guide = self._parse_output(res)
 
+        # if this is the 1st inspection, init the history.
         if 'inspector_history' not in context:
             context['inspector_history'] = []
 
+        # update the context based on the inspection result.
         if is_correct:
             context['inspector_history'].append('done')
             context['state'] = 'done'
