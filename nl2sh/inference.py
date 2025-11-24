@@ -16,7 +16,10 @@ COMPOSED = 'composed'
 NOT_PASS = 'not_passed'
 DONE = 'done'
 
+# finetuned model for composer
 FT_MD = 'ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-1k-filtered:CeTXCBeh'
+
+# base model
 MD = 'gpt-4o-mini'
 
 
