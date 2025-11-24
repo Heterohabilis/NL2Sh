@@ -178,7 +178,7 @@ def generate_eval_data(ofile = None, n = 50, seed = 114514):
 
     print(f"Pool Stats: Diff_0: {len(diff_0)}, Diff_1: {len(diff_1)}, Diff_2: {len(diff_2)}")
 
-    # Stratified sampling target: 17 + 17 + 16 = 50
+    # Stratified sampling target
     sample_counts = {0: n//3, 1: n - 2 * (n//3), 2: n//3}
 
     # Use fixed seed for reproducibility
