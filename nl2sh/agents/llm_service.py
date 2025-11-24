@@ -44,6 +44,8 @@ class LLMService:
             model=self.model,
             input=messages,
         )
+
+        # we only want the text content of the response
         return resp.output_text
 
     def chat_json(self, messages: List[Dict[str, Any]]) -> Any:
