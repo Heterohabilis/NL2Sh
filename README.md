@@ -168,3 +168,10 @@ where:
 └── runme.ipynb
 ```
 
+## Data Source and Work Cited
+
+- [Paper of the Dataset](https://huggingface.co/papers/2502.06858)
+- [Dataset](https://huggingface.co/datasets/westenfelder/NL2SH-ALFA/viewer/test/train?p=2&views%5B%5D=test)
+- [OpenAI Finetune Tutorial](https://platform.openai.com/docs/guides/supervised-fine-tuning)
+- [Inspired By...](https://github.com/browser-use/browser-use) *(This is a much larger multi-agent system with MCP tools, memories, and fantastic context management. It achieved something amazing: teach the LLM to use browsers!)*
+- *[Status Quo](https://www.anthropic.com/news/3-5-models-and-computer-use)*
