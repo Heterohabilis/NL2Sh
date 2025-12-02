@@ -180,7 +180,7 @@ where:
 
 - Screenshot:
 
-  <img src="../../../../../../.config/Typora/typora-user-images/image-20251202024106741.png" alt="image-20251202024106741" style="zoom: 50%;" />
+  <img src="assets/image2.png" alt="image-20251202024106741" style="zoom: 50%;" />
 
 - Finetune Parameters:
 
