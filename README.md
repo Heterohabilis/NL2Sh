@@ -168,6 +168,39 @@ where:
 └── runme.ipynb
 ```
 
+## Finetuned Model
+
+- Model ID: `'ft:gpt-4o-mini-2024-07-18:personal:dl-prj-2-1k-filtered:CeTXCBeh'`
+
+- Based on 1k filtered samples.
+
+- Train time = 24 minutes.
+
+- Job time (from submission to returning model ID) = 42 minutes. 
+
+- Screenshot:
+
+  <img src="../../../../../../.config/Typora/typora-user-images/image-20251202024106741.png" alt="image-20251202024106741" style="zoom: 50%;" />
+
+- Finetune Parameters:
+
+  ```yaml
+  Epochs: 1
+  Batch size: 1
+  LR multiplier: 1.8
+  Seed: 114514
+  ```
+
+- Output stats:
+
+  ```yaml
+  Train loss: 0.319
+  Valid loss: 0.250
+  Full valid loss: 0.481
+  ```
+
+  
+
 ## Data Source and Work Cited
 
 - [Paper of the Dataset](https://huggingface.co/papers/2502.06858)
